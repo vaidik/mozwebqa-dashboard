@@ -34,6 +34,7 @@ def parse_projects():
                                                       os.path.join(WORKSPACE_DIR, DUMPS_DIR, name)))
 
     local("git checkout gh-pages")
+    local("git rebase master")
     with settings(warn_only=True):
         local("cp -rvf %s/* %s" % (os.path.join(WORKSPACE_DIR, DUMPS_DIR), DUMPS_DIR))
         local("git add dumps/* && git commit -m \'dump on %s\'" % datetime.now().strftime("%B %d, %Y at %H:%M:%S"))
