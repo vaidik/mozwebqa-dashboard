@@ -35,7 +35,7 @@ def parse_projects():
 
     local("git checkout gh-pages")
     with settings(warn_only=True):
-        local("cp -rvf %s %s" % (os.path.join(WORKSPACE_DIR, DUMPS_DIR), DUMPS_DIR))
+        local("cp -rvf %s/* %s" % (os.path.join(WORKSPACE_DIR, DUMPS_DIR), DUMPS_DIR))
         local("git add dumps/* && git commit -m \'dump on %s\'" % datetime.now().strftime("%B %d, %Y at %H:%M:%S"))
         local("git checkout master")
     local("git push origin gh-pages")
