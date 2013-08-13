@@ -38,4 +38,4 @@ def parse_projects():
         local("cp -rvf %s/* %s" % (os.path.join(WORKSPACE_DIR, DUMPS_DIR), DUMPS_DIR))
         local("git add dumps/* && git commit -m \'dump on %s\'" % datetime.now().strftime("%B %d, %Y at %H:%M:%S"))
         local("git checkout master")
-    local("git push origin gh-pages")
+    local("git push -f origin gh-pages")
