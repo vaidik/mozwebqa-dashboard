@@ -1,3 +1,4 @@
+import json
 import os
 
 from datetime import datetime
@@ -9,12 +10,10 @@ from fabric.api import settings
 DUMPS_DIR = 'dumps'
 WORKSPACE_DIR = 'workspace'
 
-repos = [
-    'git@github.com:mozilla/marketplace-tests.git',
-]
 
+def parse_projects():
+    repos = json.loads(open('config.json').read())
 
-def prepare_deploy():
     if not os.path.exists(WORKSPACE_DIR):
         local('mkdir %s' % WORKSPACE_DIR)
 
@@ -30,8 +29,8 @@ def prepare_deploy():
                     local('git pull')
             else:
                 local('git clone %s' % repo)
-        local('python testparser.py %s > %s.json' % (path,
-                                                     os.path.join(WORKSPACE_DIR, DUMPS_DIR, name)))
+        local('python testsparser.py %s > %s.json' % (path,
+                                                      os.path.join(WORKSPACE_DIR, DUMPS_DIR, name)))
 
     local("git checkout gh-pages")
     with settings(warn_only=True):
