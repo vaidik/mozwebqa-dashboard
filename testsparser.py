@@ -86,6 +86,26 @@ class TestsParser(object):
 
         return files
 
+    @staticmethod
+    def clean_result(parsed_data):
+        ret_val = {}
+
+        for dir, dir_contents in parsed_data.iteritems():
+            for f, f_contents in dir_contents.iteritems():
+                for method, results in f_contents.iteritems():
+                    if len(results.keys()) != 0:
+                        ret_val.update({
+                            '%s:%s:%s' % (dir, f, method): {
+                                'dir': dir,
+                                'file': f,
+                                'method': method,
+                                'results': results,
+                            }
+                        })
+
+        return ret_val
+
+
 
 if __name__ == '__main__':
     rules = {
@@ -96,4 +116,4 @@ if __name__ == '__main__':
         raise ValueError('Provide directory name to parse.')
 
     parser = TestsParser(sys.argv[1], rules)
-    print json.dumps(parser.parse(), indent=4)
+    print json.dumps(TestsParser.clean_result(parser.parse()), indent=4)
