@@ -66,6 +66,10 @@ class TestsParser(object):
         return result
 
     def parse(self):
+        def merge_dicts(x, y):
+            x.update(y)
+            return x
+
         files = self.walk()
 
         for d in files.keys():
@@ -75,7 +79,10 @@ class TestsParser(object):
                 test_file.close()
 
                 methods = self._get_methods(test_contents)
-                files[d][f] = map(self._apply_rules_on_methods, methods)
+                results = map(self._apply_rules_on_methods, methods)
+                results.append({})
+                results.append({})
+                files[d][f] = reduce(merge_dicts, results)
 
         return files
 
