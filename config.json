@@ -1,3 +1,5 @@
-[
-    "git@github.com:mozilla/marketplace-tests.git"
-]
+{
+    "repos": [
+        "http://github.com/mozilla/marketplace-tests"
+    ]
+}

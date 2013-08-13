@@ -13,6 +13,7 @@ WORKSPACE_DIR = 'workspace'
 
 def parse_projects():
     repos = json.loads(open('config.json').read())
+    repos = repos['repos']
 
     if not os.path.exists(WORKSPACE_DIR):
         local('mkdir %s' % WORKSPACE_DIR)
