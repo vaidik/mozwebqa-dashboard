@@ -30,7 +30,7 @@ class TestsParser(object):
         previous = None
         defs = []
 
-        start_regex = '( def| @).*'
+        start_regex = '^ +(def |@).*'
 
         for i in xrange(len(lines)):
             line = lines[i]
@@ -44,6 +44,9 @@ class TestsParser(object):
                         found = 0
                 elif re.search(' +#.*', line):
                     defs[len(defs)-1] += '\n' + line
+                elif re.search(' +class', line):
+                    found = 0
+                    previous = None
                 else:
                     defs[len(defs)-1] += '\n' + line
                     if previous == 'def':
