@@ -10,6 +10,7 @@ app.controller('testanalysis', function($scope, $http) {
                 (function(repo_name) {
                     $http.get('dumps/' + repo_name + '.json').success(function(data) {
                         $scope.parse_data[repo_name] = data;
+                        Hyphenator.run();
                     });
                 }) (repo);
             }
