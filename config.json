@@ -10,6 +10,7 @@
         "http://github.com/mozilla/moztrap-tests",
         "http://github.com/mozilla/Moztrap-Tests",
         "http://github.com/mozilla/Affiliates-Tests",
+        "http://github.com/mozilla/Addon-Tests",
         "http://github.com/mozilla/Socorro-Tests",
         "http://github.com/mozilla/marketplace-tests"
     ]
