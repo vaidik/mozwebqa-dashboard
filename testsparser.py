@@ -126,4 +126,3 @@ if __name__ == '__main__':
 
     parser = TestsParser(sys.argv[1], rules)
     print json.dumps(TestsParser.clean_result(parser.parse()), indent=4)
-    print len(TestsParser.clean_result(parser.parse()).keys())
