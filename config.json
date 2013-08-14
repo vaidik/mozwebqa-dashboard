@@ -8,6 +8,7 @@
         "http://github.com/mozilla/bouncer-tests",
         "http://github.com/mozilla/qmo-tests",
         "http://github.com/mozilla/moztrap-tests",
+        "http://github.com/mozilla/Moztrap-Tests",
         "http://github.com/mozilla/Affiliates-Tests",
         "https://github.com/mozilla/Socorro-Tests.git",
         "http://github.com/mozilla/marketplace-tests"
