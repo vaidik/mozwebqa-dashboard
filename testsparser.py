@@ -27,27 +27,36 @@ class TestsParser(object):
     def _get_methods(self, test_contents):
         lines = test_contents.split('\n')
         found = 0
+        previous = None
         defs = []
 
-        start_regex = ' def| @.*'
+        start_regex = '( def| @).*'
 
         for i in xrange(len(lines)):
             line = lines[i]
             if found == 1:
-                if not re.search(start_regex, line):
-                    defs[len(defs)-1] += '\n' + line
-                else:
-                    if i-start_line['line'] <= 3:
+                matches = re.search(start_regex, line)
+                if matches:
+                    if previous is not None:
                         defs[len(defs)-1] += '\n' + line
+                        previous = matches.groups()[0].strip()
                     else:
                         found = 0
+                elif re.search(' +#.*', line):
+                    defs[len(defs)-1] += '\n' + line
+                else:
+                    defs[len(defs)-1] += '\n' + line
+                    if previous == 'def':
+                        previous = None
 
-            if re.search(start_regex, line) and found == 0:
+            matches = re.search(start_regex, line)
+            if matches and found == 0:
                 start_line = {
                     'line': i,
                     'line_content': line,
                 }
                 found = 1
+                previous = matches.groups()[0].strip()
                 defs.append(line)
 
         return defs
@@ -80,6 +89,7 @@ class TestsParser(object):
 
                 methods = self._get_methods(test_contents)
                 results = map(self._apply_rules_on_methods, methods)
+
                 results.append({})
                 results.append({})
                 files[d][f] = reduce(merge_dicts, results)
@@ -116,3 +126,4 @@ if __name__ == '__main__':
 
     parser = TestsParser(sys.argv[1], rules)
     print json.dumps(TestsParser.clean_result(parser.parse()), indent=4)
+    print len(TestsParser.clean_result(parser.parse()).keys())
