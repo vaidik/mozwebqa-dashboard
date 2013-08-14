@@ -1,6 +1,8 @@
 {
     "repos": [
         "http://github.com/mozilla/sumo-tests",
+        "http://github.com/mozilla/remo-tests",
+        "http://github.com/mozilla/Addon-Tests",
         "http://github.com/mozilla/marketplace-tests"
     ]
 }
