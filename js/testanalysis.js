@@ -8,7 +8,7 @@ app.controller('testanalysis', function($scope, $http) {
                 repo = repo[repo.length - 1];
                 
                 (function(repo_name) {
-                    $http.get('dumps/' + repo_name + '.json').success(function(data) {
+                    $http.get('dumps/' + repo_name + '.json?t=' + new Date().getTime()).success(function(data) {
                         $scope.parse_data[repo_name] = data;
                         Hyphenator.run();
                     });
