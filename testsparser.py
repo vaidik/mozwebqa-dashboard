@@ -121,7 +121,7 @@ class TestsParser(object):
 
 if __name__ == '__main__':
     rules = {
-        'skip_or_xfail': '(skip|xfail).*\((?:reason=)?(.*)\)',
+        'skip_or_xfail': '(skip|xfail|skipif)\((?:reason=)?(.*)\)',
     }
 
     if len(sys.argv) < 2:
