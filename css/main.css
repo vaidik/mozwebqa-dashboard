@@ -5,3 +5,15 @@
 .label-skip,.label-skipif {
     background: #f89406;
 }
+
+.label-closed,.label-resolved {
+    background: #b94a48;
+}
+
+.label-new,.label-reopened {
+    background-color: rgb(108, 198, 68);
+}
+
+.bug-status {
+	text-transform: uppercase;
+}

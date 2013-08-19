@@ -1,62 +1,6 @@
 var app = angular.module('dashboard', []);
 
-app.factory('parseImpUrl', function() {
-    var rules = [
-        {
-            'search': '((?:Bugzilla|bugzilla|bug|Bug) ([0-9]+))',
-            'replace': '<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=$2">$1</a>',
-        },
-        {
-            'function': function(text) {
-                var ret_val = {};
-                var urlPattern = /[^\"|\'](http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/gi;
-                angular.forEach(text.match(urlPattern), function(url) {
-                    ret_val.match = url;
-                    ret_val.replace = url.replace(url, "<a href="+ url + ">" + url +"</a>");
-                    //text = text.replace(url, "<a href="+ url + ">" + url +"</a>");
-                });
-                return ret_val;
-            },
-        },
-    ];
-
-    return function(text) {
-        var ret_val = {
-            matches: [],
-            replaces: [],
-        };
-        angular.forEach(rules, function(element, index, arr) {
-            if ('search' in element) {
-                var regex = new RegExp(element.search);
-                var match = text.match(regex);
-                if (match) {
-                    ret_val.matches.push(match[0]);
-                    ret_val.replaces.push(match[0].replace(regex, element.replace));
-                }
-            } else if ('function' in element) {
-                var match_dict = element.function(text);
-                ret_val.matches.push(match_dict.match);
-                ret_val.replaces.push(match_dict.replace);
-            }
-        });
-
-        return ret_val;
-    };
-
-
-    var urlPattern = /[^\"|\'](http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/gi;
-
-    return function(text) {
-        var urls = [];
-        angular.forEach(text.match(urlPattern), function(url) {
-            urls.push(url);
-        });
-        return urls;
-    };
-});
-
-var TestAnalysisCtrl = function($scope, $http, parseImpUrlService) {
-    var parseImpUrl = parseImpUrlService;
+var TestAnalysisCtrl = function($scope, $http, $q, $rootScope, $filter) {
     $scope.parse_data = {};
 
     $scope.init = function() {
@@ -67,21 +11,45 @@ var TestAnalysisCtrl = function($scope, $http, parseImpUrlService) {
                 
                 (function(repo_name) {
                     $http.get('dumps/' + repo_name + '.json?t=' + new Date().getTime()).success(function(data) {
-                        $scope.parse_data[repo_name] = data;
+                        $scope.parse_data[repo_name] = data['response'];
 
-                        var reason;
-                        angular.forEach($scope.parse_data[repo_name], function(val, key) {
-                            reason = val.results.skip_or_xfail[1];
-                            $scope.parse_data[repo_name][key].results.skip_or_xfail.push(parseImpUrl(reason));
+                        var results;
+                        angular.forEach($scope.parse_data[repo_name], function(entry, entry_index) {
+                            (function() {
+                                results = entry.results;
+                                angular.forEach(results, function(result, result_type) {
+                                    angular.forEach(result.links, function(link, link_index) {
+                                        (function(repo_name, entry_index, result_type, link, link_index) {
+                                            var p = $q.defer();
+                                            $.get(link.url).success(function(data) {
+                                                var status;
+                                                if (link.url.search('github') != -1) {
+                                                    status = data.state.toLowerCase();
+                                                } else if (link.url.search('bugzilla') != -1) {
+                                                    status = data.status + (typeof data.resolution != "undefined" ? ' - ' + data.resolution : "");
+                                                    status = status.toLowerCase();
+                                                }
+
+                                                $rootScope.$apply(function() {
+                                                    p.resolve(status);
+                                                });
+                                            });
+
+                                            $scope.parse_data[repo_name][entry_index].results[result_type].links[link_index].status = p.promise;
+                                        } (repo_name, entry_index, result_type, link, link_index));
+                                    });
+                                });
+                            }());
                         });
                         Hyphenator.run();
+                        setTimeout(function() { Hyphenator.run(); }, 500);
                     });
                 }) (repo);
             }
         });
     }
 };
-TestAnalysisCtrl.$inject = ['$scope', '$http', 'parseImpUrl'];
+TestAnalysisCtrl.$inject = ['$scope', '$http', '$q', '$rootScope'];
 
 var linkify = function() {
     var rules = [
@@ -93,7 +61,7 @@ var linkify = function() {
             'function': function(text) {
                 var urlPattern = /[^\"|\'](http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/gi;
                 angular.forEach(text.match(urlPattern), function(url) {
-                    text = text.replace(url, "<a href="+ url + ">" + url +"</a>");
+                    text = text.replace(url, "<a href=\"" + url + "\">" + url +"</a>");
                 });
                 return text;
             },
@@ -112,5 +80,4 @@ var linkify = function() {
         return input;
     };
 };
-linkify.$inject = [];
 app.filter('linkify', linkify);

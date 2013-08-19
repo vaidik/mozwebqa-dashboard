@@ -73,7 +73,12 @@ class TestsParser(object):
         for rule_name, rule in self.rules.iteritems():
             match = re.search(rule, method)
             if match:
-                result[method_name].update({rule_name: list(match.groups())})
+                match = {
+                    rule_name: {
+                        'reason': match.groups()[0]
+                    }
+                }
+                result[method_name].update(match)
 
         return result
 
@@ -100,32 +105,74 @@ class TestsParser(object):
         return files
 
     @staticmethod
+    def parse_result(result):
+        rules = {
+            'github': {
+                'search': r'((http:|https:)//[^ \<]*github\.com([^ \<]*[^ \<\.\"\']))',
+                'replace': r'https://api.github.com/repos\3',
+            },
+            'bugzilla': {
+                'search': r'((?:Bugzilla|bugzilla|bug|Bug) ([0-9]+))',
+                'replace': r'https://api-dev.bugzilla.mozilla.org/latest/bug/\2',
+            },
+        }
+
+        links = []
+
+        for rule_name, rule in rules.iteritems():
+            for result_type in result.keys():
+                reason = result[result_type]['reason']
+                try:
+                    if isinstance(rule, dict):
+                        match = re.search(rule['search'], reason)
+                        url = match.groups()[0]
+                        if rule.get('replace', None):
+                            url = re.sub(rule['search'], rule['replace'], url)
+                    elif isinstance(rule, str):
+                        match = re.search(rule, reason)
+                        url = match.groups()[0]
+                    string = match.groups()[0]
+
+                    links.append({'url': url,
+                                  'status': 'Getting status...',
+                                  'string': string})
+                except AttributeError:
+                    pass
+
+        return links
+
+    @staticmethod
     def clean_result(parsed_data):
-        ret_val = {}
+        ret_val = []
 
         for dir, dir_contents in parsed_data.iteritems():
             for f, f_contents in dir_contents.iteritems():
                 for method, results in f_contents.iteritems():
-                    if len(results.keys()) != 0:
-                        ret_val.update({
-                            '%s:%s:%s' % (dir, f, method): {
+                    for result_type in results.keys():
+                        if len(results.keys()) != 0:
+                            links = TestsParser.parse_result(results)
+                            results[result_type]['links'] = links
+
+                            ret_val.append({
                                 'dir': dir,
                                 'file': f,
                                 'method': method,
                                 'results': results,
-                            }
-                        })
+                            })
 
         return ret_val
 
-
 if __name__ == '__main__':
     rules = {
-        'skip_or_xfail': '(skip|xfail|skipif)\((?:reason=)?(.*)\)',
+        'skip': 'skip\((?:reason=)?(.*)\)',
+        'skipif': 'skipif\((?:reason=)?(.*)\)',
+        'xfail': 'xfail\((?:reason=)?(.*)\)',
     }
 
     if len(sys.argv) < 2:
         raise ValueError('Provide directory name to parse.')
 
     parser = TestsParser(sys.argv[1], rules)
-    print json.dumps(TestsParser.clean_result(parser.parse()), indent=4)
+    print json.dumps({
+        'response': TestsParser.clean_result(parser.parse()),
+    }, indent=2)
