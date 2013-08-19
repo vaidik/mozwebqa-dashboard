@@ -11,6 +11,7 @@
         "http://github.com/mozilla/Affiliates-Tests",
         "http://github.com/mozilla/Addon-Tests",
         "http://github.com/mozilla/Socorro-Tests",
-        "http://github.com/mozilla/marketplace-tests"
+        "http://github.com/mozilla/marketplace-tests",
+        "http://github.com/mozilla/wiki-tests"
     ]
 }
