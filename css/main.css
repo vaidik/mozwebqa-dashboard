@@ -10,7 +10,7 @@
     background: #b94a48;
 }
 
-.label-new,.label-reopened {
+.label-new,.label-reopened,.label-open {
     background-color: rgb(108, 198, 68);
 }
 
