@@ -6,7 +6,7 @@
     background: #f89406;
 }
 
-.label-closed,.label-resolved {
+.label-closed,.label-resolved,.label-verified {
     background: #b94a48;
 }
 
