@@ -65,7 +65,7 @@
                                     </tr>
 
                                     <tr ng-repeat="(key, val) in test_data">
-                                        <td><span class="hyphenate">{{val.dir}}/<strong>{{val.file}}</strong></td>
+                                        <td><span class="hyphenate">{{val.dir.split(name + '/tests')[1]}}/<strong>{{val.file}}</strong></td>
                                         <td><span class="hyphenate">{{val.method}}</span></td>
                                         <td class="reason-holder">
                                             <div ng-repeat="(result_type, result) in val.results">
