@@ -109,13 +109,13 @@ class TestsParser(object):
         rules = {
             'github': {
                 'search': (r'((http:|https:)//[^ \<]*github\.com'
-                           '([^ \<]*[^ \<\.\"\']))'),
+                           r'([^ \<]*[^ \<\.\"\']))'),
                 'replace': r'https://api.github.com/repos\3',
             },
             'bugzilla': {
                 'search': r'((?:Bugzilla|bugzilla|bug|Bug) ([0-9]+))',
                 'replace': (r'https://api-dev.bugzilla.mozilla.org/'
-                            'latest/bug/\2'),
+                            r'latest/bug/\2'),
             },
         }
 
