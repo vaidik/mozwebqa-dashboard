@@ -25,6 +25,8 @@
 .reason {
     padding: 0 8px 8px 8px;
     height: inherit;
+    border-top: 1px solid #ddd;
+    margin-top:-1px;
 }
 
 .reason > span {
