@@ -108,12 +108,14 @@ class TestsParser(object):
     def parse_result(result):
         rules = {
             'github': {
-                'search': r'((http:|https:)//[^ \<]*github\.com([^ \<]*[^ \<\.\"\']))',
+                'search': (r'((http:|https:)//[^ \<]*github\.com'
+                           '([^ \<]*[^ \<\.\"\']))'),
                 'replace': r'https://api.github.com/repos\3',
             },
             'bugzilla': {
                 'search': r'((?:Bugzilla|bugzilla|bug|Bug) ([0-9]+))',
-                'replace': r'https://api-dev.bugzilla.mozilla.org/latest/bug/\2',
+                'replace': (r'https://api-dev.bugzilla.mozilla.org/'
+                            'latest/bug/\2'),
             },
         }
 
@@ -152,6 +154,10 @@ class TestsParser(object):
                         if len(results.keys()) != 0:
                             links = TestsParser.parse_result(results)
                             results[result_type]['links'] = links
+
+                            # Strip quotes
+                            results[result_type]['reason'] = results[
+                                result_type]['reason'].strip('\'').strip('\"')
 
                             ret_val.append({
                                 'dir': dir,

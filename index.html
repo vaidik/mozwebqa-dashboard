@@ -11,13 +11,13 @@
         <meta name="viewport" content="width=device-width">
 
         <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
         <style>
             body {
                 padding-top: 60px;
                 padding-bottom: 40px;
             }
         </style>
-        <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
         <link rel="stylesheet" href="css/main.css">
 
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
@@ -51,30 +51,33 @@
                                 <thead>
                                     <tr>
                                         <th width="30%">File</th>
-                                        <th width="25%">Test Name</th>
-                                        <th width="5%">Type</th>
-                                        <th width="40%">Reason</th>
+                                        <th width="30%">Test Name</th>
+                                        <th width="40%">Type</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
+                                    <!-- if there are no xfails -->
+                                    <tr ng-if="test_data.length == 0">
+                                        <td colspan="3" class="hooray">
+                                            Hooray! No skips or xfails!
+                                        </td>
+                                    </tr>
+
                                     <tr ng-repeat="(key, val) in test_data">
                                         <td><span class="hyphenate">{{val.dir}}/<strong>{{val.file}}</strong></td>
                                         <td><span class="hyphenate">{{val.method}}</span></td>
-                                        <td>
-                                            <ul ng-repeat="(result_type, result) in val.results">
-                                                <li><span class="label label-{{result_type}}">{{result_type}}</span></li>
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <ul ng-repeat="(result_type, result) in val.results">
-                                                <li ng-bind-html-unsafe="result.reason | linkify"></li>
-                                                <ul>
-                                                    <li ng-repeat="link in result.links">
-                                                        <a href="{{link.url}}">{{link.string}}</a> <span class="label label-{{link.status.split(' -')[0]}} bug-status">{{link.status}}</span>
-                                                    </li>
-                                                </ul>
-                                            </ul>
+                                        <td class="reason-holder">
+                                            <div ng-repeat="(result_type, result) in val.results">
+                                                <div class="reason reason-{{result_type}}">
+                                                    <span ng-bind-html-unsafe="result.reason | linkify "></span>
+                                                    <ul>
+                                                        <li ng-repeat="link in result.links">
+                                                            <a href="{{link.url}}">{{link.string}}</a> <span class="label label-{{link.status.split(' -')[0]}} bug-status">{{link.status}}</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>

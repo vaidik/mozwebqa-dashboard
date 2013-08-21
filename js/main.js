@@ -42,10 +42,10 @@ var TestAnalysisCtrl = function($scope, $http, $q, $rootScope, $filter) {
                             }());
                         });
                         Hyphenator.run();
-                        setTimeout(function() { Hyphenator.run(); }, 500);
                     });
                 }) (repo);
             }
+            setTimeout(function() { Hyphenator.run(); }, 500);
         });
     }
 };

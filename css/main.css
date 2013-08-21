@@ -11,9 +11,67 @@
 }
 
 .label-new,.label-reopened,.label-open {
-    background-color: rgb(108, 198, 68);
+    background-color: rgb(76, 151, 43);
 }
 
 .bug-status {
-	text-transform: uppercase;
+    text-transform: uppercase;
+}
+
+.reason-holder {
+    padding: 0 !important;
+}
+
+.reason {
+    padding: 0 8px 8px 8px;
+    height: inherit;
+}
+
+.reason > span {
+    display: block;
+    padding-top: 8px;
+}
+
+.reason-skip,.reason-skipif {
+    background: rgba(238, 200, 0, 0.14);
+}
+
+.reason-skipif:before,.reason-skip:before,.reason-xfail:before {
+    top: -1px;
+    left: -10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+    border: 1px solid #ddd;
+    color: white;
+    -webkit-border-radius: 0px 0px 4px 4px;
+    -moz-border-radius: 0px 0px 4px 4px;
+    border-radius: 0px 0px 4px 4px;
+}
+
+.reason-skip:before {
+    content: "Skip";
+    background-color: #f89406;
+}
+
+.reason-skipif:before {
+    content: "Skip If";
+    background-color: #f89406;
+}
+
+.reason-xfail:before {
+    content: "xFail";
+    background: #b94a48;
+}
+
+.reason-xfail {
+    background: rgba(255, 93, 90, 0.12);
+}
+
+.hooray {
+    text-align: center !important;
+    font-size: 1.3em;
+    font-weight: bold;
+    font-style: italic;
 }
