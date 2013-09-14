@@ -1,8 +1,15 @@
 #!/bin/bash
 
 # Github Credentials
-GH_USER=""
-GH_PASS=""
+if [ -z $GH_USER ]; then
+    echo "Set environment variable GH_USER to a valid Github username."
+    exit 1
+fi
+
+if [ -z $GH_PASS ]; then
+    echo "Set environment variable GH_PASS to a valid Github account's password."
+    exit 1
+fi
 
 WORKSPACE_DIR="workspace"
 DUMPS_DIR="dumps"

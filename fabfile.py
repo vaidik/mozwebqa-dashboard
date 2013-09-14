@@ -12,7 +12,10 @@ WORKSPACE_DIR = 'workspace'
 
 
 def parse_projects():
-    if GH_USER == '' or GH_PASS == '':
+    GH_USER = os.environ.get('GH_USER', None)
+    GH_PASS = os.environ.get('GH_PASS', None)
+
+    if GH_USER is None or GH_PASS is None:
         raise Exception('Provide Github username and password.')
     repos = open('repos.txt', 'r').read().split('\n')
 
