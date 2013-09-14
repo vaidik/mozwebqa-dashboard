@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# Github Credentials
+GH_USER=""
+GH_PASS=""
+
+WORKSPACE_DIR="workspace"
+DUMPS_DIR="dumps"
+DUMPS_DIR_PATH=$WORKSPACE_DIR/$DUMPS_DIR
+
+# Change directory to project's root
+pushd $1
+
+# Create workspace dir if does not exist
+if [ ! -d $WORKSPACE_DIR ]; then
+    mkdir $WORKSPACE_DIR
+fi
+
+# Create dumps dir if does not exist
+if [ ! -d $DUMPS_DIR_PATH ]; then
+    mkdir $DUMPS_DIR_PATH
+fi
+
+# Get project name from repo url
+function get_project_name {
+    # $1 - the string to perform split on
+
+    index=0
+    split_arr[0]=""
+    for i in $(echo "$1" | tr "/" " "); do
+        split_arr[$index]=$i
+        index=$((index+1))
+    done
+
+    echo ${split_arr[$((index-1))]}
+}
+
+# parse projects
+function parse_project {
+    repo=$1
+
+    name=`get_project_name $repo`
+
+    pushd $WORKSPACE_DIR
+    if [ -d $name ]; then
+        pushd $name
+        git pull
+        popd
+    else
+        git clone $repo
+    fi
+    popd
+
+    python testsparser.py $WORKSPACE_DIR/$name > "$DUMPS_DIR_PATH/$name.json"
+}
+
+for repo in `cat repos.txt`
+do
+    parse_project $repo
+done
+
+git checkout gh-pages
+git rebase master
+cp -rvf $DUMPS_DIR_PATH/* $DUMPS_DIR
+git add dumps/* && git commit -m "dump on `date`"
+git checkout master
+git push -f https://$GH_USER:$GH_PASS@github.com/vaidik/mozwebqa-dashboard.git gh-pages
+
+if [ $? -eq 0 ]; then
+    RET_VAL=0
+else
+    RET_VAL=1
+fi
+
+echo "PUSHED"
+
+# Go back to the directory you came from
+popd
+
+return $RET_VAL

@@ -12,8 +12,9 @@ WORKSPACE_DIR = 'workspace'
 
 
 def parse_projects():
-    repos = json.loads(open('config.json').read())
-    repos = repos['repos']
+    if GH_USER == '' or GH_PASS == '':
+        raise Exception('Provide Github username and password.')
+    repos = open('repos.txt', 'r').read().split('\n')
 
     if not os.path.exists(WORKSPACE_DIR):
         local('mkdir %s' % WORKSPACE_DIR)
@@ -30,13 +31,15 @@ def parse_projects():
                     local('git pull')
             else:
                 local('git clone %s' % repo)
-        local('python testsparser.py %s > %s.json' % (path,
-                                                      os.path.join(WORKSPACE_DIR, DUMPS_DIR, name)))
+        local('python testsparser.py %s > %s.json' % (
+            path, os.path.join(WORKSPACE_DIR, DUMPS_DIR, name)))
 
     local("git checkout gh-pages")
     local("git rebase master")
     with settings(warn_only=True):
-        local("cp -rvf %s/* %s" % (os.path.join(WORKSPACE_DIR, DUMPS_DIR), DUMPS_DIR))
-        local("git add dumps/* && git commit -m \'dump on %s\'" % datetime.now().strftime("%B %d, %Y at %H:%M:%S"))
+        local("cp -rvf %s/* %s" % (os.path.join(WORKSPACE_DIR, DUMPS_DIR),
+                                   DUMPS_DIR))
+        local("git add dumps/* && git commit -m \'dump on %s\'" % (
+            datetime.now().strftime("%B %d, %Y at %H:%M:%S"),))
         local("git checkout master")
-    local("git push -f origin gh-pages")
+    local("git push -f https://%s:%s@github.com/vaidik/mozwebqa-dashboard.git gh-pages" % (GH_USER, GH_PASS))
