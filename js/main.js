@@ -4,9 +4,10 @@ var TestAnalysisCtrl = function($scope, $http, $q, $rootScope, $filter) {
     $scope.parse_data = {};
 
     $scope.init = function() {
-        $http.get('config.json').success(function(data) {
-            for (var repo in data.repos) {
-                repo = data.repos[repo].split('/');
+        $http.get('repos.txt').success(function(data) {
+            var repos = data.split('\n');
+            for (var repo in repos) {
+                repo = repos[repo].split('/');
                 repo = repo[repo.length - 1];
                 
                 (function(repo_name) {
