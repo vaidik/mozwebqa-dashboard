@@ -84,4 +84,4 @@ echo "PUSHED"
 # Go back to the directory you came from
 popd
 
-return $RET_VAL
+exit $RET_VAL
