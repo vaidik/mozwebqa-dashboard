@@ -137,7 +137,16 @@ class TestsParser(object):
 
                     links.append({'url': url,
                                   'status': 'Getting status...',
-                                  'string': string})
+                                  'raw': string})
+
+                    if 'github' in string and 'issues' in string:
+                        url_split = url.split('/')
+                        to_use = '%s/%s-#%s' % (url_split[4], url_split[5],
+                                                url_split[7])
+                    else:
+                        to_use = string
+                    links[len(links)-1].update(to_use=to_use)
+
                 except AttributeError:
                     pass
 

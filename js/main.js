@@ -62,7 +62,12 @@ var linkify = function() {
             'function': function(text) {
                 var urlPattern = /[^\"|\'](http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/gi;
                 angular.forEach(text.match(urlPattern), function(url) {
-                    text = text.replace(url, "<a href=\"" + url + "\">" + url +"</a>");
+                    var anchorText = url;
+                    if (url.search('github') != -1 && url.search('issues') != -1) {
+                        var split = url.split('/');
+                        anchorText = split[3] + '/' + split[4] + '-#' + split[6];
+                    }
+                    text = text.replace(url, "<a href=\"" + url + "\">" + anchorText +"</a>");
                 });
                 return text;
             },
