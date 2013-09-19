@@ -71,7 +71,7 @@
                                             <div ng-repeat="(result_type, result) in val.results">
                                                 <div class="reason reason-{{result_type}}">
                                                     <span ng-bind-html-unsafe="result.reason | linkify "></span>
-                                                    <ul>
+                                                    <ul style="font-size: 12px;">
                                                         <li ng-repeat="link in result.links">
                                                               <span class="label label-{{link.bug_info.status.split(' -')[0]}} bug-status">{{link.bug_info.status}}</span> <a href="{{link.url}}">{{link.to_use}}</a> - <span style="font-style: italic;">{{link.bug_info.title}}</span>
                                                         </li>
