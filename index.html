@@ -73,7 +73,7 @@
                                                     <span ng-bind-html-unsafe="result.reason | linkify "></span>
                                                     <ul>
                                                         <li ng-repeat="link in result.links">
-                                                            <a href="{{link.url}}">{{link.to_use}}</a> <span class="label label-{{link.status.split(' -')[0]}} bug-status">{{link.status}}</span>
+                                                              <span class="label label-{{link.bug_info.status.split(' -')[0]}} bug-status">{{link.bug_info.status}}</span> <a href="{{link.url}}">{{link.to_use}}</a> - <span style="font-style: italic;">{{link.bug_info.title}}</span>
                                                         </li>
                                                     </ul>
                                                 </div>

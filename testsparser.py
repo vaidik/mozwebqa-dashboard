@@ -136,7 +136,6 @@ class TestsParser(object):
                     string = match.groups()[0]
 
                     links.append({'url': url,
-                                  'status': 'Getting status...',
                                   'raw': string})
 
                     if 'github' in string and 'issues' in string:

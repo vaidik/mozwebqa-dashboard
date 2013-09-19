@@ -23,20 +23,25 @@ var TestAnalysisCtrl = function($scope, $http, $q, $rootScope, $filter) {
                                         (function(repo_name, entry_index, result_type, link, link_index) {
                                             var p = $q.defer();
                                             $.get(link.url).success(function(data) {
-                                                var status;
+                                                var status, title;
                                                 if (link.url.search('github') != -1) {
                                                     status = data.state.toLowerCase();
+                                                    title = data.title;
                                                 } else if (link.url.search('bugzilla') != -1) {
                                                     status = data.status + (typeof data.resolution != "undefined" ? ' - ' + data.resolution : "");
                                                     status = status.toLowerCase();
+                                                    title = data.summary;
                                                 }
 
                                                 $rootScope.$apply(function() {
-                                                    p.resolve(status);
+                                                    p.resolve({
+                                                        'status': status,
+                                                        'title': title
+                                                    });
                                                 });
                                             });
 
-                                            $scope.parse_data[repo_name][entry_index].results[result_type].links[link_index].status = p.promise;
+                                            $scope.parse_data[repo_name][entry_index].results[result_type].links[link_index].bug_info = p.promise;
                                         } (repo_name, entry_index, result_type, link, link_index));
                                     });
                                 });
