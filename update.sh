@@ -71,7 +71,7 @@ git rebase master
 cp -rvf $DUMPS_DIR_PATH/* $DUMPS_DIR
 git add dumps/* && git commit -m "dump on `date`"
 git checkout master
-git push -f https://$GH_USER:$GH_PASS@github.com/vaidik/mozwebqa-dashboard.git gh-pages
+git push -f https://$GH_USER:$GH_PASS@github.com/mozilla/mozwebqa-dashboard.git gh-pages
 
 if [ $? -eq 0 ]; then
     RET_VAL=0

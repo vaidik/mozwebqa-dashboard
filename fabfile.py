@@ -45,4 +45,4 @@ def parse_projects():
         local("git add dumps/* && git commit -m \'dump on %s\'" % (
             datetime.now().strftime("%B %d, %Y at %H:%M:%S"),))
         local("git checkout master")
-    local("git push -f https://%s:%s@github.com/vaidik/mozwebqa-dashboard.git gh-pages" % (GH_USER, GH_PASS))
+    local("git push -f https://%s:%s@github.com/mozilla/mozwebqa-dashboard.git gh-pages" % (GH_USER, GH_PASS))
