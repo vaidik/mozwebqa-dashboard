@@ -66,6 +66,9 @@ do
     parse_project $repo
 done
 
+#This assumes git@github.com:mozilla/mozwebqa-dashboard.git is your origin
+
+git pull origin master
 git checkout gh-pages
 git rebase master
 cp -rvf $DUMPS_DIR_PATH/* $DUMPS_DIR
