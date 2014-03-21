@@ -61,7 +61,8 @@ function parse_project {
     python testsparser.py $WORKSPACE_DIR/$name > "$DUMPS_DIR_PATH/$name.json"
 }
 
-for repo in `cat repos.txt`
+hash jq 2>/dev/null || { echo >&2 "I require jq [http://stedolan.github.io/jq/download/]  but it's not installed.  Aborting."; exit 1; }
+for repo in repos=$(cat repos.json | jq '.repos' | tr -d "\""  | tr -d "[,]")
 do
     parse_project $repo
 done
