@@ -62,7 +62,8 @@ function parse_project {
 }
 
 hash jq 2>/dev/null || { echo >&2 "I require jq [http://stedolan.github.io/jq/download/]  but it's not installed.  Aborting."; exit 1; }
-for repo in repos=$(cat repos.json | jq '.repos' | tr -d "\""  | tr -d "[,]")
+repos=$(cat config.json | jq '.repos' | tr -d "\""  | tr -d "[,]")
+for repo in $repos
 do
     parse_project $repo
 done
