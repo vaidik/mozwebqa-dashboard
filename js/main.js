@@ -37,8 +37,8 @@ dashboardApp.controller('XfailsController',function ($scope, $http, $q, $rootSco
 
   $scope.init = function () {
     $("#nav-xfail").addClass('active');
-    $http.get('repos.txt').success(function (data) {
-      var repos = data.split('\n');
+    $http.get('config.json').success(function (data) {
+      var repos = data.repos;
       for (var repo in repos) {
         repo = repos[repo].split('/');
         repo = repo[repo.length - 1];
@@ -158,7 +158,7 @@ dashboardApp.controller('MarketplaceController', function ($scope, $http) {
 
   $scope.init = function () {
     $("#nav-marketplace").addClass('active');
-    $http.get('data/marketplace_tests_results.json').success(function (data) {
+    $http.get('data/marketplace_jobs_results.json').success(function (data) {
       $scope.testResults = data;
       $scope.resultFilters = {'isPassing': true, 'isSkipping': true, 'isFailing': true};
 
