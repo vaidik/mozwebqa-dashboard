@@ -24,6 +24,7 @@
                     </select>
                 </div>
             </div>
+            <div>Test results last refreshed from CI on {{last_updated}}.</div>
             <div class="test-result" ng-repeat="group in testResults">
                 <h3 ng-click="toggleGroup(group)">{{group.group}}</h3>
                 <table class="table table-bordered" ng-show="group.show">

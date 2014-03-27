@@ -4,6 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import datetime
 import json
 import xml.etree.cElementTree as et
 
@@ -98,8 +99,9 @@ class JenkinsResultsAggregator(object):
         return 'unknown'
 
     def _generate_json_file(self, json_results):
+        final = {'last_updated': str(datetime.datetime.now()), 'results': json_results}
         with open('data/marketplace_jobs_results.json', 'w') as outfile:
-            json.dump(json_results, outfile)
+            json.dump(final, outfile)
 
 
 if __name__ == '__main__':
