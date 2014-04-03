@@ -18,7 +18,7 @@
     "https://github.com/mozilla/sumo-tests",
     "https://github.com/mozilla/wiki-tests"
   ],
-  "jenkins_artifact_url_pattern": "http://selenium.qa.mtv2.mozilla.com:8080/job/%s/lastSuccessfulBuild/artifact/results.xml",
+  "jenkins_artifact_url_pattern": "http://selenium.qa.mtv2.mozilla.com:8080/job/%s/lastCompletedBuild/artifact/results.xml",
   "marketplace_jobs": [
     "b2g.hamachi.mozilla-b2g28_v1_3.v1.3.marketplace",
     "marketplace.dev.developer_hub.saucelabs",
