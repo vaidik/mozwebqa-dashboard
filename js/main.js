@@ -159,7 +159,8 @@ dashboardApp.controller('MarketplaceController', function ($scope, $http) {
   $scope.init = function () {
     $("#nav-marketplace").addClass('active');
     $http.get('data/marketplace_jobs_results.json').success(function (data) {
-      $scope.testResults = data;
+      $scope.testResults = data.results;
+      $scope.last_updated = data.last_updated;
       $scope.resultFilters = {'isPassing': true, 'isSkipping': true, 'isFailing': true};
 
       // Set up display properties for the groups
