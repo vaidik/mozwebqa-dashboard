@@ -61,17 +61,22 @@ function parse_project {
     python testsparser.py $WORKSPACE_DIR/$name > "$DUMPS_DIR_PATH/$name.json"
 }
 
-for repo in `cat repos.txt`
+hash jq 2>/dev/null || { echo >&2 "I require jq [http://stedolan.github.io/jq/download/]  but it's not installed.  Aborting."; exit 1; }
+repos=$(cat config.json | jq '.repos' | tr -d "\""  | tr -d "[,]")
+for repo in $repos
 do
     parse_project $repo
 done
 
+#This assumes git@github.com:mozilla/mozwebqa-dashboard.git is your origin
+
+git pull origin master
 git checkout gh-pages
 git rebase master
 cp -rvf $DUMPS_DIR_PATH/* $DUMPS_DIR
 git add dumps/* && git commit -m "dump on `date`"
 git checkout master
-git push -f https://$GH_USER:$GH_PASS@github.com/vaidik/mozwebqa-dashboard.git gh-pages
+git push -f https://$GH_USER:$GH_PASS@github.com/mozilla/mozwebqa-dashboard.git gh-pages
 
 if [ $? -eq 0 ]; then
     RET_VAL=0
